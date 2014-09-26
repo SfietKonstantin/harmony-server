@@ -1,1 +1,4 @@
 node_modules
+*.js
+routes/*.js
+public/js/*.js
