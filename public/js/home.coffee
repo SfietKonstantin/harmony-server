@@ -4,8 +4,7 @@ class root.HomeView extends root.View
     template: "home"
 
     initialize: =>
-        @test = new NotificationCollection([{title: "test 1"}, {title: "test 2"}, {title: "test 3"}, {title: "test 4"}, {title: "test 5"}, {title: "test 6"}, {title: "test 7"}, {title: "test 8"}])
-        @notifications = new NotificationsView({collection: @test})
+        @notifications = new NotificationListView()
         return
 
     render: =>

@@ -1,7 +1,7 @@
 root = exports ? this
 class root.NotificationModel extends Backbone.Model
     defaults:
-        href: ""
+        id: ""
         title: ""
         body: ""
 
@@ -14,11 +14,26 @@ class root.NotificationView extends root.View
         @doAsyncAppend @model.toJSON()
         @
 
-class root.NotificationsView extends root.View
-    template: "notifications"
+class root.NotificationListView extends root.View
+    template: "notification-list"
+    loading: false
     initialize: =>
-        # @collection = new root.NotificationCollection
+        @collection = new root.NotificationCollection
+        
+        # Get the notifications from API
+        $.ajax {
+            url: "api/notifications"
+            success: (data) =>
+                @_parseReply data
+            dataType: 'json'
+        }
         return
     render: =>
         @doAsyncRenderCollection "#notifications", @collection, NotificationView
         @
+        
+    _parseReply: (data) =>
+        for notification in data
+            model = new NotificationModel(notification)
+            @collection.push model
+        @render

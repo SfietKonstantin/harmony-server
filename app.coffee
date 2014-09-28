@@ -1,7 +1,8 @@
 express = require('express')
 routes = require('./routes/routes')
 path = require('path')
-http = require('http')
+https = require('https')
+fs = require('fs')
 
 app = express()
 router = express.Router()
@@ -19,7 +20,15 @@ app.configure 'development', ->
     return
 
 app.get '/api/notifications', routes.api.notifications
-    
-http.createServer(app).listen app.get('port'), ->
+
+options = {
+    key: fs.readFileSync('ssl/harmony-server.key')
+    cert: fs.readFileSync('ssl/harmony-server.crt')
+    ca: fs.readFileSync('ssl/harmony-ca.crt')
+    requestCert: true
+    rejectUnauthorized: false
+}
+
+https.createServer(options, app).listen app.get('port'), ->
     console.log("Express server listening on port #{app.get('port')}")
     return

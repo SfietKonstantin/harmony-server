@@ -1,8 +1,8 @@
 coffee -c *.coffee
-pushd routes
+pushd routes > /dev/null 2>&1
 coffee -c *.coffee
-popd
+popd > /dev/null 2>&1
 
-pushd public/js
+pushd public/js > /dev/null 2>&1
 coffee -c *.coffee
-popd
+popd > /dev/null 2>&1

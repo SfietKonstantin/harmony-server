@@ -86,6 +86,7 @@ class ApplicationRouter extends Backbone.Router
         "": "home"
         "settings": "settings"
         "notifications": "notifications"
+        "notifications/:id": "notifications"
         "*actions": "home"
     }
 
@@ -108,6 +109,11 @@ class ApplicationRouter extends Backbone.Router
         if not @settingsView
             @settingsView = new SettingsView()
         @settingsView.render()
+        return
+    notifications: =>
+        if not @notificationsView
+            @notificationsView = new NotificationsView()
+        @notificationsView.render()
         return
 
 root.templateManager = new TemplateManager()
