@@ -1,5 +1,8 @@
 root = exports ? this
-class root.SettingsView extends Backbone.View
-	el: "#content"
-	render: -> 
-		root.templateManager.asyncRender(@, 'settings')
+class root.SettingsView extends root.View
+    el: "#content"
+    template: "settings"
+
+    render: =>
+        @doAsyncRender()
+        @

@@ -1,7 +1,8 @@
 root = exports ? this
-class root.FooterView extends Backbone.View
-	el: "#footer"
-	
-	render: -> 
-		root.templateManager.asyncRender(@, 'footer')
-		@
+class root.FooterView extends root.View
+    el: "#footer"
+    template: "footer"
+
+    render: =>
+        @doAsyncRender()
+        @

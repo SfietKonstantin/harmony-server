@@ -1,26 +1,24 @@
 root = exports ? this
 class root.NotificationModel extends Backbone.Model
-	defaults:
-		href: ""
-		title: ""
-		body: ""
-	
-class root.NotificationCollection extends Backbone.Collection
-	model: root.NotificationModel
+    defaults:
+        href: ""
+        title: ""
+        body: ""
 
-class root.NotificationView extends Backbone.View
-	render: ->
-		templateManager.asyncAppend(@, 'notification', @model.toJSON())
-		@
-		
-class root.NotificationsView extends Backbone.View
-	initialize: ->
-		# @collection = new root.NotificationCollection
-		return
-	render: -> 
-		#root.templateManager.asyncRenderWithCallback @, 'notifications', =>
-		#	@collection.each (notification) =>
-		#		notificationView = new NotificationView({model: notification})
-		#		@.$("#notifications").append(notificationView.render().el)
-		root.templateManager.asyncRenderCollection(@, 'notifications', '#notifications', @collection, NotificationView)
-		@
+class root.NotificationCollection extends Backbone.Collection
+    model: root.NotificationModel
+
+class root.NotificationView extends root.View
+    template: "notification"
+    render: =>
+        @doAsyncAppend @model.toJSON()
+        @
+
+class root.NotificationsView extends root.View
+    template: "notifications"
+    initialize: =>
+        # @collection = new root.NotificationCollection
+        return
+    render: =>
+        @doAsyncRenderCollection "#notifications", @collection, NotificationView
+        @
