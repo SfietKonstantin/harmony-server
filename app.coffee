@@ -1,27 +1,30 @@
-express = require('express')
-routes = require('./routes/routes')
-path = require('path')
-https = require('https')
-fs = require('fs')
-websocket = require('websocket')
+express = require 'express'
+routes = require './routes/routes'
+path = require 'path'
+https = require 'https'
+fs = require 'fs'
+websocket = require 'websocket'
+# favicon = require 'serve-favicon'
+morgan = require 'morgan'
+errorhandler = require 'errorhandler'
 
 app = express()
 router = express.Router()
 
-app.configure ->
-    app.set 'port', 3000
-    app.use express.favicon()
-    app.use express.logger 'dev'
-    app.use app.router
-    app.use express.static path.join(__dirname, 'public')
-    return
+# App settings
+app.set 'port', 3000
+app.use express.static path.join __dirname, 'public'
+# app.use favicon()
+app.use morgan 'dev'
 
-app.configure 'development', ->
-    app.use express.errorHandler()
-    return
+env = process.env.NODE_ENV || 'development'
+if env == 'development'
+    app.use errorhandler()
 
+# Routes
 app.get '/api/notifications', routes.api.notifications
 
+# Server
 options = {
     key: fs.readFileSync('ssl/harmony-server.key')
     cert: fs.readFileSync('ssl/harmony-server.crt')
