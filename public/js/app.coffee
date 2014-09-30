@@ -117,6 +117,9 @@ class ApplicationRouter extends Backbone.Router
         return
 
 root.templateManager = new TemplateManager()
+root.connection = new root.WebSocket 'wss://localhost:3000'
+root.connection.onopen = ->
+    console.debug "OPENED"
 
 jQuery ->
     app = new ApplicationRouter()

@@ -3,6 +3,7 @@ routes = require('./routes/routes')
 path = require('path')
 https = require('https')
 fs = require('fs')
+websocket = require('websocket')
 
 app = express()
 router = express.Router()
@@ -29,6 +30,16 @@ options = {
     rejectUnauthorized: false
 }
 
-https.createServer(options, app).listen app.get('port'), ->
+server = https.createServer(options, app).listen app.get('port'), ->
     console.log("Express server listening on port #{app.get('port')}")
     return
+
+# WebSockets
+wsServer = new websocket.server {
+    httpServer: server
+}
+
+wsServer.on 'request', (request) ->
+    console.log request
+    connection = request.accept null, request.origin
+    
