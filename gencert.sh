@@ -3,7 +3,7 @@
 # CA
 
 mkdir ssl > /dev/null 2>&1
-cd ssl
+pushd ssl > /dev/null 2>&1
 
 openssl genrsa -des3 -out harmony-ca.key -passout pass:harmony-ca-key 1024 > /dev/null 2>&1
 openssl req -new -key harmony-ca.key -out harmony-ca.csr -passin pass:harmony-ca-key -subj '/C=FR/ST=Ile de France/L=Paris/CN=Harmony project'  > /dev/null 2>&1
@@ -18,3 +18,5 @@ openssl x509 -req -days 365 -in harmony-server.csr -signkey harmony-server.key -
 
 # Public 
 openssl rsa -in harmony-server.key -pubout -out harmony-server-key.pub > /dev/null 2>&1
+
+popd > /dev/null 2>&1

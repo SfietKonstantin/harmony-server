@@ -1,0 +1,22 @@
+Name: harmony-server
+Summary: The harmony-server
+Version: 0.0
+Release: 1
+Group: Qt/Qt
+URL: https://github.com/SfietKonstantin/harmony-server
+License: BSD
+Sources:
+- '%{name}-%{version}.tar.bz2'
+Description: |
+  An experiment about running a webapplication 
+  to expose phone information
+Configure: none
+Builder: none
+PkgBR: 
+- nodejs-npm
+- autoconf
+- automake
+Requires:
+- nodejs
+Files:
+- '%{_datadir}/%{name}'
