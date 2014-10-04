@@ -1,7 +1,7 @@
 root = exports ? this
-class root.HomeView extends root.View
+class root.NotificationsView extends root.View
     el: "#content"
-    template: "home"
+    template: "notifications"
 
     initialize: =>
         @notifications = new NotificationListView()
@@ -9,7 +9,6 @@ class root.HomeView extends root.View
 
     refresh: =>
         @notifications.refresh()
-        return
 
     render: =>
         @doAsyncRenderTree {'#notifications-container': @notifications}

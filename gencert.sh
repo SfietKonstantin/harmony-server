@@ -15,3 +15,6 @@ openssl req -new -key harmony-server.key -out harmony-server.csr -passin pass:ha
 cp harmony-server.key harmony-server.key.orig
 openssl rsa -in harmony-server.key.orig -out harmony-server.key -passin pass:harmony-server-key  > /dev/null 2>&1
 openssl x509 -req -days 365 -in harmony-server.csr -signkey harmony-server.key -out harmony-server.crt -passin pass:harmony-server-key  > /dev/null 2>&1
+
+# Public 
+openssl rsa -in harmony-server.key -pubout -out harmony-server-key.pub > /dev/null 2>&1

@@ -17,23 +17,44 @@ class root.NotificationView extends root.View
 class root.NotificationListView extends root.View
     template: "notification-list"
     loading: false
+    state: ""
     initialize: =>
         @collection = new root.NotificationCollection
-        
+        return
+
+    refresh: =>
+        @state = "loading"
+        @render()
         # Get the notifications from API
         $.ajax {
             url: "api/notifications"
-            success: (data) =>
+            success: (data, textStatus, jqXHR) =>
                 @_parseReply data
+                @state = "success"
+                @render()
+            error: (jqXHR, textStatus, errorThrown) =>
+                @state = "error"
+                @render()
             dataType: 'json'
+            headers: {
+                Authorization: 'Bearer ' + root.loginManager.token
+            }
         }
         return
     render: =>
-        @doAsyncRenderCollection "#notifications", @collection, NotificationView
+        switch @state
+            when "loading" 
+                console.log "NotificationListView: Loading"
+            when "success" 
+                console.log "NotificationListView: Success"
+                @doAsyncRenderCollection "#notifications", @collection, NotificationView
+            when "error" 
+                console.log "NotificationListView: Error"
+            else
+                console.log "NotificationListView: Unknown"
         @
         
     _parseReply: (data) =>
         for notification in data
             model = new NotificationModel(notification)
             @collection.push model
-        @render

@@ -6,10 +6,13 @@ fs = require 'fs'
 websocket = require 'websocket'
 # favicon = require 'serve-favicon'
 morgan = require 'morgan'
+bodyparser = require 'body-parser'
 errorhandler = require 'errorhandler'
+expressjwt = require 'express-jwt'
+jwt = require 'jsonwebtoken'
+tokenManager = require './tokenmanager'
 
 app = express()
-router = express.Router()
 
 # App settings
 app.set 'port', 3000
@@ -17,11 +20,27 @@ app.use express.static path.join __dirname, 'public'
 # app.use favicon()
 app.use morgan 'dev'
 
+# Token management
+tokenManager.tm.secret = fs.readFileSync('ssl/harmony-server-key.pub')
+
+app.use '/api', expressjwt({secret: tokenManager.tm.secret})
+app.use bodyparser.json()
+app.use bodyparser.urlencoded({extended: false})
+
 env = process.env.NODE_ENV || 'development'
 if env == 'development'
     app.use errorhandler()
 
 # Routes
+app.post '/authenticate', (req, res) ->
+    authCode = req.body["password"]
+    if authCode != "pass"
+        res.status(401).send('Wrong authentification code')
+        return
+    token = tokenManager.tm.generateToken authCode, jwt
+    res.json {'token': token}
+    return
+
 app.get '/api/notifications', routes.api.notifications
 
 # Server
@@ -43,6 +62,13 @@ wsServer = new websocket.server {
 }
 
 wsServer.on 'request', (request) ->
-    console.log request
-    connection = request.accept null, request.origin
+    token = request.resourceURL.path.replace(/^\//, "")
+    if tokenManager.tm.websocketAddable token
+        websocket = request.accept null, request.origin
+        tokenManager.tm.addWebSocket token, websocket
+    else
+        request.reject 403
+
+wsServer.on 'connect', (connection) ->
+    
     
