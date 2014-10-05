@@ -18,8 +18,9 @@ Source0:    %{name}-%{version}.tar.bz2
 Source100:  harmony-server.yaml
 Requires:   nodejs
 BuildRequires:  nodejs-npm
-BuildRequires:  autoconf
-BuildRequires:  automake
+BuildRequires:  python
+BuildRequires:  gcc-c++
+BuildRequires:  nodejs-devel
 
 %description
 An experiment about running a webapplication 
@@ -34,10 +35,10 @@ to expose phone information
 
 %build
 # >> build pre
-./build.sh install
 # << build pre
 
 
+make %{?_smp_mflags}
 
 # >> build post
 # << build post
@@ -46,6 +47,7 @@ to expose phone information
 rm -rf %{buildroot}
 # >> install pre
 # << install pre
+%make_install
 
 # >> install post
 # << install post

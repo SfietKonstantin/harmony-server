@@ -11,11 +11,12 @@ Description: |
   An experiment about running a webapplication 
   to expose phone information
 Configure: none
-Builder: none
+Builder: make
 PkgBR: 
 - nodejs-npm
-- autoconf
-- automake
+- python
+- gcc-c++
+- nodejs-devel
 Requires:
 - nodejs
 Files:
